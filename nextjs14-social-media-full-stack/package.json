@@ -1,0 +1,27 @@
+{
+  "name": "nextjs14-social-media",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "11.10.4",
+    "@emotion/styled": "11.10.4",
+    "@mui/icons-material": "5.10.9",
+    "@mui/material": "5.10.10",
+    "axios": "1.1.3",
+    "moment": "2.29.4",
+    "next": "14.0.4",
+    "react": "18",
+    "react-dom": "18",
+    "sass": "1.69.7"
+  },
+  "devDependencies": {
+    "eslint": "8",
+    "eslint-config-next": "14.0.4"
+  }
+}
