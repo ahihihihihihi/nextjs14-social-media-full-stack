@@ -3,6 +3,7 @@
 import { useContext } from "react";
 import "./leftBar.scss";
 import { AuthContext } from "@/context/authContext";
+import Link from "next/link";
 
 
 
@@ -14,13 +15,18 @@ const LeftBar = () => {
         <div className="leftBar">
             <div className="container">
                 <div className="menu">
-                    <div className="user">
-                        <img
-                            src={currentUser?.profilePic}
-                            alt=""
-                        />
-                        <span>{currentUser?.name}</span>
-                    </div>
+                    <Link
+                        href={`/profile/${currentUser.id}`}
+                        className="link"
+                    >
+                        <div className="user">
+                            <img
+                                src={"/upload/" + currentUser?.profilePic}
+                                alt=""
+                            />
+                            <span>{currentUser?.name}</span>
+                        </div>
+                    </Link>
                     <div className="item">
                         <img src={"/assets/1.png"} alt="" />
                         <span>Friends</span>

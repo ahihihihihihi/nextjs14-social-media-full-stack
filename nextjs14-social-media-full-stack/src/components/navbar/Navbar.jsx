@@ -9,17 +9,26 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { useContext } from "react";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/authContext";
 import Link from "next/link";
-
+import { useRouter } from 'next/navigation'
 
 
 const Navbar = () => {
 
     const { darkMode, toggle } = useContext(DarkModeContext)
     const { currentUser } = useContext(AuthContext);
+
+    const router = useRouter()
+
+    const logout = () => {
+        // alert("ahihi")
+        localStorage.setItem("user", false);
+        location.href = "/";
+    }
 
     return (
         <div className="navbar">
@@ -43,13 +52,20 @@ const Navbar = () => {
                 <PersonOutlinedIcon />
                 <EmailOutlinedIcon />
                 <NotificationsOutlinedIcon />
-                <div className="user">
-                    <img
-                        src={currentUser?.profilePic}
-                        alt=""
-                    />
-                    <span>{currentUser?.name}</span>
-                </div>
+                <LogoutOutlinedIcon style={{ cursor: "pointer" }} onClick={logout} />
+                {/* <button onClick={logout}>Log out</button> */}
+                {/* <Link
+                    href={`/profile/${currentUser.id}`}
+                    className="link"
+                >
+                    <div className="user">
+                        <img
+                            src={"/upload/" + currentUser.profilePic}
+                            alt=""
+                        />
+                        <span>{currentUser?.name}</span>
+                    </div>
+                </Link> */}
             </div>
         </div>
     );

@@ -19,7 +19,7 @@ CREATE TABLE `Comments` (
   KEY `postId` (`postId`),
   CONSTRAINT `Comments_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Comments_ibfk_2` FOREIGN KEY (`postId`) REFERENCES `Posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `Likes`;
 CREATE TABLE `Likes` (
@@ -31,7 +31,7 @@ CREATE TABLE `Likes` (
   KEY `postId` (`postId`),
   CONSTRAINT `Likes_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Likes_ibfk_2` FOREIGN KEY (`postId`) REFERENCES `Posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `Posts`;
 CREATE TABLE `Posts` (
@@ -43,7 +43,7 @@ CREATE TABLE `Posts` (
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
   CONSTRAINT `Posts_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `Relationships`;
 CREATE TABLE `Relationships` (
@@ -55,7 +55,7 @@ CREATE TABLE `Relationships` (
   KEY `followedUserId` (`followedUserId`),
   CONSTRAINT `Relationships_ibfk_1` FOREIGN KEY (`followerUserId`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Relationships_ibfk_2` FOREIGN KEY (`followedUserId`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `Stories`;
 CREATE TABLE `Stories` (
@@ -79,7 +79,7 @@ CREATE TABLE `Users` (
   `city` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `website` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 INSERT INTO `Comments` (`id`, `desc`, `userId`, `postId`, `createdAt`) VALUES
 (1, 'ahihi', 2, 7, '2024-01-16 16:22:50');
@@ -93,16 +93,24 @@ INSERT INTO `Comments` (`id`, `desc`, `userId`, `postId`, `createdAt`) VALUES
 (6, 'ahihi', 1, 9, '2024-01-18 11:36:20'),
 (7, 'ahuhu', 1, 7, '2024-01-18 11:39:25'),
 (8, 'ahaha', 1, 9, '2024-01-18 11:40:27'),
-(9, 'ahaha', 1, 2, '2024-01-18 11:41:37');
+(9, 'ahaha', 1, 2, '2024-01-18 11:41:37'),
+(10, 'ahaha', 2, 3, '2024-01-18 16:03:31'),
+(11, 'ahihi', 2, 3, '2024-01-18 16:03:37'),
+(12, 'zui zui', 5, 7, '2024-01-18 16:39:04'),
+(13, 'comment ahihi', 5, 10, '2024-01-18 16:39:37');
 
 INSERT INTO `Likes` (`id`, `userId`, `postId`) VALUES
 (19, 2, 7);
 INSERT INTO `Likes` (`id`, `userId`, `postId`) VALUES
-(20, 2, 6);
-INSERT INTO `Likes` (`id`, `userId`, `postId`) VALUES
 (22, 2, 1);
 INSERT INTO `Likes` (`id`, `userId`, `postId`) VALUES
 (24, 1, 7);
+INSERT INTO `Likes` (`id`, `userId`, `postId`) VALUES
+(25, 2, 9),
+(26, 2, 5),
+(27, 5, 7),
+(28, 5, 5),
+(29, 5, 6);
 
 INSERT INTO `Posts` (`id`, `desc`, `img`, `userId`, `createdAt`) VALUES
 (1, 'desc1', NULL, 1, '2024-01-15 09:24:56');
@@ -114,7 +122,9 @@ INSERT INTO `Posts` (`id`, `desc`, `img`, `userId`, `createdAt`) VALUES
 (5, 'ahihi', NULL, 2, '2024-01-16 14:28:01'),
 (6, 'ahaha', NULL, 2, '2024-01-16 14:37:09'),
 (7, 'post with image', '1705393637909cot-song.jpg', 2, '2024-01-16 15:27:17'),
-(9, 'nothing to think, ahihi...', '1705550049428pexels-photo-1457983.jpeg', 1, '2024-01-18 10:54:09');
+(9, 'nothing to think, ahihi...', '1705550049428pexels-photo-1457983.jpeg', 1, '2024-01-18 10:54:09'),
+(10, 'hello world!', '1705569575961pexels-photo-2065200.jpeg', 5, '2024-01-18 16:19:35'),
+(11, 'ahihi', '1705571026587pexels-photo-1457983.jpeg', 5, '2024-01-18 16:43:46');
 
 INSERT INTO `Relationships` (`id`, `followerUserId`, `followedUserId`) VALUES
 (2, 2, 1);
@@ -122,6 +132,8 @@ INSERT INTO `Relationships` (`id`, `followerUserId`, `followedUserId`) VALUES
 (3, 2, 4);
 INSERT INTO `Relationships` (`id`, `followerUserId`, `followedUserId`) VALUES
 (4, 1, 2);
+INSERT INTO `Relationships` (`id`, `followerUserId`, `followedUserId`) VALUES
+(5, 5, 2);
 
 
 
@@ -131,6 +143,8 @@ INSERT INTO `Users` (`id`, `username`, `email`, `password`, `name`, `coverPic`, 
 (2, 'test2', 'test2@email.com', '$2a$10$ZhkG2nxIY6vL2O1y5M0d1eovV7nrfMKCRR0lbG7QVWFJJ4eoavhdy', 'Test2', '1705488638992than-kinh.jpg', '1705488639003doctor1.jpg', 'SG', 'http://ahihi.com');
 INSERT INTO `Users` (`id`, `username`, `email`, `password`, `name`, `coverPic`, `profilePic`, `city`, `website`) VALUES
 (4, 'test3', 'test3@gmail.com', '$2a$10$6cJUyHVDJikrI2O6pLuy9OOTOPEFyJOLEk44JZMBQ.GB/72/TVmyq', 'John Doe', '1705489069969co-xuong-khop.jpg', '1705489069980doctor3.jpg', NULL, NULL);
+INSERT INTO `Users` (`id`, `username`, `email`, `password`, `name`, `coverPic`, `profilePic`, `city`, `website`) VALUES
+(5, 'admin', 'admin@email.com', '$2a$10$itdIdvMHO5iMqHh/DSphROdWdeeziJZUfQCyipZJps1v5dTcslmDO', 'Admin', '1705569365693tai-mui-hong.jpg', '1705569365706doctor1.jpg', 'HKK', 'admin.vn');
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

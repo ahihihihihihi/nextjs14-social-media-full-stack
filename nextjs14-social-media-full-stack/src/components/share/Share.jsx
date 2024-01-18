@@ -1,11 +1,10 @@
+'use client'
+
 import "./Share.scss";
-import Image from "../../assets/img.png";
-import Map from "../../assets/map.png";
-import Friend from "../../assets/friend.png";
 import { useContext, useState } from "react";
-import { AuthContext } from "../../context/authContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { makeRequest } from "../../axios";
+import { AuthContext } from "@/context/authContext";
+import { makeRequest } from "../utils/axios";
 
 
 const Share = () => {
@@ -78,16 +77,16 @@ const Share = () => {
                         />
                         <label htmlFor="file">
                             <div className="item">
-                                <img src={Image} alt="" />
+                                <img src={"/assets/img.png"} alt="" />
                                 <span>Add Image</span>
                             </div>
                         </label>
                         <div className="item">
-                            <img src={Map} alt="" />
+                            <img src={"/assets/map.png"} alt="" />
                             <span>Add Place</span>
                         </div>
                         <div className="item">
-                            <img src={Friend} alt="" />
+                            <img src={"/assets/friend.png"} alt="" />
                             <span>Tag Friends</span>
                         </div>
                     </div>

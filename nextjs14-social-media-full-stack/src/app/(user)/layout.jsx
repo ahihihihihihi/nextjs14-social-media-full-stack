@@ -4,6 +4,7 @@ import LeftBar from '@/components/leftBar/LeftBar'
 import RightBar from '@/components/rightBar/RightBar'
 import '@/app/style.scss'
 import ThemeProvider from '@/context/ThemeProvider'
+import QueryProvider from '@/context/QueryProvider'
 
 
 export const metadata = {
@@ -14,16 +15,18 @@ export const metadata = {
 export default function UserLayout({ children }) {
   return (
     <>
-      <ThemeProvider>
-        <Navbar />
-        <div style={{ display: "flex" }}>
-          <LeftBar />
-          <div style={{ flex: 6 }}>
-            {children}
+      <QueryProvider>
+        <ThemeProvider>
+          <Navbar />
+          <div style={{ display: "flex" }}>
+            <LeftBar />
+            <div style={{ flex: 6 }}>
+              {children}
+            </div>
+            <RightBar />
           </div>
-          <RightBar />
-        </div>
-      </ThemeProvider>
+        </ThemeProvider>
+      </QueryProvider>
     </>
   )
 }

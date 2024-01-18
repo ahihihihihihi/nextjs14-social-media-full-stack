@@ -7,16 +7,79 @@ import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Comments from "../comments/Comments";
 import Link from "next/link";
+
+import moment from "moment";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
+import { makeRequest } from "../utils/axios";
+
 
 const Post = ({ post }) => {
 
     const [commentOpen, setCommentOpen] = useState(false);
 
-    //TEMPORARY
-    const liked = false;
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const [commentNumber, setCommentNumber] = useState(0);
+
+    const [once, setOnce] = useState(1);
+
+    const { currentUser } = useContext(AuthContext);
+
+    const queryClient = useQueryClient();
+
+    const { isLoading, error, data } = useQuery(["likes", post.id], () =>
+        makeRequest.get("/likes?postId=" + post.id).then((res) => {
+            return res.data;
+        })
+    );
+
+    const mutation = useMutation(
+        (liked) => {
+            if (liked) return makeRequest.delete("/likes?postId=" + post.id);
+            return makeRequest.post("/likes", { postId: post.id });
+        },
+        {
+            onSuccess: () => {
+                // Invalidate and refetch
+                queryClient.invalidateQueries(["likes"]);
+            },
+        }
+    );
+
+    const handleLike = () => {
+        mutation.mutate(data.includes(currentUser.id));
+    };
+
+    const handleDelete = () => {
+        deleteMutation.mutate(post.id);
+    };
+
+    const deleteMutation = useMutation(
+        (postId) => {
+            return makeRequest.delete("/posts/" + postId);
+        },
+        {
+            onSuccess: () => {
+                // Invalidate and refetch
+                queryClient.invalidateQueries(["posts"]);
+            },
+        }
+    );
+
+    useEffect(() => {
+        if (once) {
+            makeRequest.get("/comments?postId=" + post.id).then((res) => {
+                // console.log(">>>check temp_comments:", res.data)
+                setOnce(0)
+                setCommentNumber(res.data.length)
+            })
+        }
+    }, [])
 
     return (
         <div className="post">
@@ -27,7 +90,7 @@ const Post = ({ post }) => {
                             href={`/profile/${post.userId}`}
                             className="link"
                         >
-                            <img src={post.profilePic} alt="" />
+                            <img src={"/upload/" + post.profilePic} alt="" />
                         </Link>
                         <div className="details">
                             <Link
@@ -36,30 +99,46 @@ const Post = ({ post }) => {
                             >
                                 <span className="name">{post.name}</span>
                             </Link>
-                            <span className="date">1 min ago</span>
+                            <span className="date">{moment(post.createdAt).fromNow()}</span>
                         </div>
                     </div>
-                    <MoreHorizIcon style={{ cursor: "pointer" }} />
+                    <MoreHorizIcon style={post.userId === currentUser.id ? { cursor: "pointer" } : { cursor: "not-allowed" }} onClick={() => setMenuOpen(!menuOpen)} />
+                    {menuOpen && post.userId === currentUser.id && (
+                        <button onClick={handleDelete}>delete</button>
+                    )}
                 </div>
                 <div className="content">
                     <p>{post.desc}</p>
-                    <img src={post.img} alt="" />
+                    <img src={"/upload/" + post.img} alt="" />
                 </div>
                 <div className="info">
                     <div className="item">
-                        {liked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
-                        12 Likes
+                        {isLoading ?
+                            ("loading") :
+                            data?.includes(currentUser.id) ?
+                                <FavoriteOutlinedIcon
+                                    style={{ color: "red" }}
+                                    onClick={handleLike}
+                                />
+                                :
+                                <FavoriteBorderOutlinedIcon
+                                    onClick={handleLike}
+                                />}
+                        {data?.length === 0 ? " Like" : data?.length === 1 ? " 1 Like" : ` ${data?.length} Likes`}
                     </div>
                     <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
                         <TextsmsOutlinedIcon />
-                        12 Comments
+                        {commentNumber === 0 ? " Comment" : commentNumber === 1 ? " 1 Comment" : ` ${commentNumber} Comments`}
                     </div>
                     <div className="item">
                         <ShareOutlinedIcon />
                         Share
                     </div>
                 </div>
-                {commentOpen && <Comments />}
+                {commentOpen && <Comments
+                    postId={post.id}
+                    setCommentNumber={setCommentNumber}
+                />}
             </div>
         </div>
     );
